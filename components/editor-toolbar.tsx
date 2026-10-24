@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
+import { useSyncExternalStore } from "react"
 import {
   Check,
   Copy,
@@ -18,6 +18,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+
+const noopSubscribe = () => () => {}
 
 interface EditorStats {
   words: number
@@ -50,11 +52,7 @@ export function EditorToolbar({
   onQr,
 }: EditorToolbarProps) {
   const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false)
 
   return (
     <TooltipProvider delayDuration={300}>
